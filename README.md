@@ -13,8 +13,7 @@ Plant-Disease-Detection/
 ├── api/                    # FastAPI backend
 │   ├── main.py             # API server (predict & ping endpoints)
 │   ├── requirements.txt    # Python dependencies
-│   ├── Dockerfile          # Docker config for Hugging Face Spaces
-│   └── README.md           # HF Spaces metadata
+│   └── Dockerfile          # Docker configuration
 ├── frontend/               # React + Vite frontend
 │   ├── src/
 │   │   ├── App.jsx
@@ -25,10 +24,10 @@ Plant-Disease-Detection/
 │   │       └── PredictionResult.jsx
 │   ├── index.html
 │   └── package.json
-├── models/                 # Keras model (not tracked in git)
-│   └── 1.keras
-├── training/               # Jupyter notebooks used for training
-├── plan.md                 # Future enhancement roadmap
+├── models/                 # Model files directory
+│   └── 1.keras             # Trained Keras CNN model (~178 MB)
+├── training/               # Jupyter notebooks for model training
+├── plan.md                 # Project roadmap
 └── README.md
 ```
 
@@ -42,6 +41,8 @@ Plant-Disease-Detection/
 - **Node.js 18+** — [Download](https://nodejs.org/)
 - **Git** — [Download](https://git-scm.com/)
 
+---
+
 ### 1. Clone the Repository
 
 ```bash
@@ -49,66 +50,72 @@ git clone https://github.com/ridhirajvi27-dotcom/plant-disease-detector.git
 cd plant-disease-detector
 ```
 
-### 2. Download the Trained Model
+---
 
-The `1.keras` model file (~178 MB) is hosted on Hugging Face and is **not included in the git repo**.
+### 2. Model File Setup
 
-Download it and place it in the `models/` folder:
+Ensure the trained model file `1.keras` is placed inside the `models/` directory:
 
-```bash
-mkdir models
-# Option A: Using huggingface-cli
-huggingface-cli download Rir25/plant-disease-api models/1.keras --repo-type space --local-dir .
-
-# Option B: Using Python
-python -c "from huggingface_hub import hf_hub_download; hf_hub_download(repo_id='Rir25/plant-disease-api', filename='models/1.keras', repo_type='space', local_dir='.')"
+```
+Plant-Disease-Detection/
+└── models/
+    └── 1.keras
 ```
 
-### 3. Set Up the Backend (FastAPI)
-
-```bash
-# Install Python dependencies
-cd api
-pip install -r requirements.txt
-
-# Start the FastAPI server
-uvicorn main:app --reload
-```
-
-The API will be running at **http://localhost:8000**
-
-Verify it works:
-- Health check: [http://localhost:8000/ping](http://localhost:8000/ping)
-- Interactive docs: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### 4. Set Up the Frontend (React + Vite)
-
-Open a **new terminal** window:
-
-```bash
-# Install Node dependencies
-cd frontend
-npm install
-
-# Start the development server
-npm run dev
-```
-
-The frontend will open at **http://localhost:3000**
-
-> **Note:** For local development, update `API_BASE_URL` in `frontend/src/App.jsx` to:
-> ```javascript
-> const API_BASE_URL = 'http://localhost:8000';
+> **Note:** If you don't have the pre-trained model file, you can train a new one using the Jupyter notebook provided in the `training/` folder:
+> ```bash
+> jupyter notebook training/plant_disease.ipynb
 > ```
+> Save the exported model to `models/1.keras`.
 
 ---
 
-## 🌐 Live Deployment
+### 3. Start the Backend (FastAPI)
 
-| Component | Platform | URL |
-| :--- | :--- | :--- |
-| **Backend API** | Hugging Face Spaces | `https://rir25-plant-disease-api.hf.space` |
-| **Frontend** | Vercel / Netlify | *(deploy frontend/dist)* |
+1. Open a terminal and navigate to the `api/` directory:
+   ```bash
+   cd api
+   ```
+
+2. Install the required Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the FastAPI development server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+4. The API server will be available at **`http://localhost:8000`**.
+   - Health check endpoint: [http://localhost:8000/ping](http://localhost:8000/ping)
+   - Interactive Swagger API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+### 4. Start the Frontend (React + Vite)
+
+1. Open a **new terminal window** and navigate to the `frontend/` directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install Node modules:
+   ```bash
+   npm install
+   ```
+
+3. Ensure backend target URL is set to local in `frontend/src/App.jsx`:
+   ```javascript
+   const API_BASE_URL = 'http://localhost:8000';
+   ```
+
+4. Launch the frontend development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Access the user interface in your web browser (typically at **`http://localhost:5173`** or **`http://localhost:3000`**).
 
 ---
 
@@ -116,22 +123,26 @@ The frontend will open at **http://localhost:3000**
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `GET` | `/ping` | Health check — returns `{ status, model_loaded }` |
-| `POST` | `/predict` | Upload an image file → returns `{ class, confidence }` |
+| `GET` | `/ping` | Health check — returns `{ status: "alive", model_loaded: true/false }` |
+| `POST` | `/predict` | Upload leaf image form-data (`file`) → returns predicted `{ class, confidence }` |
 | `GET` | `/docs` | Interactive Swagger UI documentation |
 
 ---
 
 ## 🧠 Model Details
 
-- **Architecture**: CNN (Convolutional Neural Network)
-- **Framework**: Keras 3 with PyTorch backend
-- **Input**: 256×256 RGB leaf images, normalized to [0.0, 1.0]
-- **Classes**: `Potato___Early_blight`, `Potato___Late_blight`, `Potato___healthy`
-- **Dataset**: [PlantVillage](https://www.kaggle.com/datasets/arjuntejaswi/plant-village)
+- **Architecture**: Convolutional Neural Network (CNN)
+- **Framework**: Keras 3 (Torch / TensorFlow backend)
+- **Input**: 256×256 RGB images, normalized pixel values `[0.0, 1.0]`
+- **Classes**:
+  1. `Potato___Early_blight`
+  2. `Potato___Late_blight`
+  3. `Potato___healthy`
+- **Dataset**: [PlantVillage Dataset](https://www.kaggle.com/datasets/arjuntejaswi/plant-village)
 
 ---
 
 ## 📜 License
 
 MIT
+

@@ -56,11 +56,11 @@ def load_model():
     if MODEL_PATH and os.path.exists(MODEL_PATH):
         try:
             MODEL = keras.models.load_model(MODEL_PATH)
-            print(f"✅ Model successfully loaded from: {MODEL_PATH}")
+            print(f"[OK] Model successfully loaded from: {MODEL_PATH}")
         except Exception as e:
-            print(f"❌ Error loading model from {MODEL_PATH}: {e}")
+            print(f"[ERROR] Error loading model from {MODEL_PATH}: {e}")
     else:
-        print(f"⚠️ Warning: Model file not found in any expected location.")
+        print("[WARN] Model file not found in any expected location.")
 
 def read_file_as_image(data: bytes) -> np.ndarray:
     """Reads image bytes, converts to RGB, resizes to (256, 256), and normalizes pixels to [0.0, 1.0]."""

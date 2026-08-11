@@ -4,7 +4,7 @@ import ImageUploader from './components/ImageUploader';
 import PredictionResult from './components/PredictionResult';
 import { Sprout } from 'lucide-react';
 
-const API_BASE_URL = 'https://rir25-plant-disease-api.hf.space';
+const API_BASE_URL = 'http://localhost:8000';
 
 export default function App() {
   const [selectedFile, setSelectedFile] = useState(null);
