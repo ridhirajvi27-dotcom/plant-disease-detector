@@ -438,3 +438,40 @@ h1, h2, h3, h4 {
   margin: 0 auto 1rem;
   opacity: 0.4;
 }
+
+/* Chatbot Markdown Prose Styling */
+.prose p {
+  margin-bottom: 0.5rem;
+}
+.prose p:last-child {
+  margin-bottom: 0;
+}
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-weight: 700;
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+  color: #a7f3d0;
+}
+.prose ul, .prose ol {
+  padding-left: 1.25rem;
+  margin: 0.4rem 0;
+}
+.prose li {
+  margin-bottom: 0.25rem;
+}
+.prose code {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-family: monospace;
+}
+.prose blockquote {
+  border-left: 3px solid #10b981;
+  padding-left: 0.75rem;
+  color: #9ca3af;
+  font-style: italic;
+  margin: 0.5rem 0;
+}
+
