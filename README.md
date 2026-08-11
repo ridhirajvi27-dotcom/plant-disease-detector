@@ -1,8 +1,33 @@
-# 🌿 PlantCare AI — Plant Disease Detection
+# 🌿 PlantCare AI — Plant Disease Detection & RAG Agronomist
 
-AI-powered potato leaf disease detection using a **Keras CNN model**, served via a **FastAPI** backend and a modern **React + Vite** frontend.
+**PlantCare AI** is an end-to-end intelligent agricultural platform combining computer vision for instant leaf disease classification with a **Retrieval-Augmented Generation (RAG) AI Agronomist Assistant**.
 
-Upload a photo of a potato plant leaf and get instant diagnosis: **Early Blight**, **Late Blight**, or **Healthy** — with confidence scores and treatment recommendations.
+Upload a potato leaf photo to diagnose **Early Blight**, **Late Blight**, or **Healthy** status, and chat in real-time with an AI agronomist for grounded organic treatments, fungicide dosages, and field prevention strategies.
+
+---
+
+## ✨ Key Features
+
+### 📸 1. AI Leaf Disease Detection (Computer Vision)
+- **Instant Diagnosis**: Classifies potato leaf images into **Early Blight**, **Late Blight**, or **Healthy**.
+- **High-Accuracy CNN**: Powered by a custom **Keras 3 CNN model** trained on the PlantVillage dataset.
+- **Confidence & Severity Rating**: Visual progress bars and severity badges (🔴 *High Severity / Urgent Action*, 🟡 *Moderate*, 🟢 *Healthy*).
+
+### 🤖 2. Hybrid RAG AI Agronomist Chatbot
+- **Grounded Agronomic Data**: Utilizes a Retrieval-Augmented Generation (RAG) engine grounded in verified agricultural manuals (`api/knowledge_base/potato_diseases.json`).
+- **Context-Aware Recommendations**: Automatically injects the active leaf diagnosis into the prompt context to prevent AI hallucinations.
+- **Dual-Tier Hybrid Architecture**:
+  - **Tier 1 (LLM Generation)**: Connects to **Groq (Llama 3.1 8B)** or **OpenAI (GPT-4o-mini)** when API keys are configured.
+  - **Tier 2 (Zero-Cost Offline Fallback)**: Built-in intelligent rule & knowledge retrieval engine for immediate, reliable answers without external API dependency.
+- **1-Click Quick Action Pills**: Preset buttons for 🌿 *Organic Treatment*, 🧪 *Chemical Dosages*, 🛡️ *Prevention Guidelines*, and 🔍 *Symptom Spotting*.
+- **Suggested Follow-up Questions**: Dynamically generated prompts tailored to the plant's health status.
+
+### 🎨 3. Enterprise-Grade User Experience (React + Vite)
+- **Dark Emerald Glassmorphism**: Premium visual UI with animated glow effects and micro-interactions.
+- **Dual Layout Modes**: Toggle seamlessly between an **Expandable Floating Drawer** and a **Dedicated Full-Height Side Panel**.
+- **Rich Markdown Formatting**: Supports formatted text, bullet lists, blockquotes, and safety callout banners.
+- **Copy & Share Capabilities**: 1-click button to copy treatment instructions to clipboard.
+- **Drag & Drop Uploader**: Smooth image upload with real-time preview and instant server communication.
 
 ---
 
@@ -10,25 +35,28 @@ Upload a photo of a potato plant leaf and get instant diagnosis: **Early Blight*
 
 ```
 Plant-Disease-Detection/
-├── api/                    # FastAPI backend
-│   ├── main.py             # API server (predict & ping endpoints)
-│   ├── requirements.txt    # Python dependencies
-│   └── Dockerfile          # Docker configuration
-├── frontend/               # React + Vite frontend
+├── api/                            # FastAPI backend
+│   ├── main.py                     # Server endpoints (/predict, /chat, /ping)
+│   ├── rag_engine.py               # Hybrid RAG & Knowledge Retrieval engine
+│   ├── knowledge_base/
+│   │   └── potato_diseases.json    # Grounded agricultural knowledge base
+│   ├── requirements.txt            # Python dependencies
+│   └── Dockerfile                  # Containerization setup
+├── frontend/                       # React + Vite frontend
 │   ├── src/
 │   │   ├── App.jsx
-│   │   ├── index.css
+│   │   ├── index.css               # Design system & glassmorphism styles
 │   │   └── components/
-│   │       ├── Header.jsx
-│   │       ├── ImageUploader.jsx
-│   │       └── PredictionResult.jsx
+│   │       ├── Header.jsx          # Header with active context indicator
+│   │       ├── ImageUploader.jsx   # Drag & drop leaf uploader
+│   │       ├── PredictionResult.jsx# Diagnosis status & severity card
+│   │       └── Chatbot.jsx         # RAG AI Agronomist chatbot UI
 │   ├── index.html
 │   └── package.json
-├── models/                 # Model files directory
-│   └── 1.keras             # Trained Keras CNN model (~178 MB)
-├── training/               # Jupyter notebooks for model training
-├── plan.md                 # Project roadmap
-└── README.md
+├── models/                         # Trained model directory
+│   └── 1.keras                     # Keras 3 CNN model file (~178 MB)
+├── training/                       # Jupyter notebooks for CNN model training
+└── README.md                       # Project documentation
 ```
 
 ---
@@ -82,12 +110,19 @@ Plant-Disease-Detection/
    pip install -r requirements.txt
    ```
 
-3. Run the FastAPI development server:
+3. *(Optional)* Configure external LLM API key for Tier-1 RAG generation:
+   ```bash
+   export GROQ_API_KEY="your_groq_api_key_here"
+   # OR
+   export OPENAI_API_KEY="your_openai_api_key_here"
+   ```
+
+4. Run the FastAPI development server:
    ```bash
    uvicorn main:app --reload
    ```
 
-4. The API server will be available at **`http://localhost:8000`**.
+5. The API server will be available at **`http://localhost:8000`**.
    - Health check endpoint: [http://localhost:8000/ping](http://localhost:8000/ping)
    - Interactive Swagger API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
@@ -115,7 +150,7 @@ Plant-Disease-Detection/
    npm run dev
    ```
 
-5. Access the user interface in your web browser (typically at **`http://localhost:5173`** or **`http://localhost:3000`**).
+5. Access the user interface in your web browser (typically at **`http://localhost:5173`**).
 
 ---
 
@@ -125,6 +160,7 @@ Plant-Disease-Detection/
 | :--- | :--- | :--- |
 | `GET` | `/ping` | Health check — returns `{ status: "alive", model_loaded: true/false }` |
 | `POST` | `/predict` | Upload leaf image form-data (`file`) → returns predicted `{ class, confidence }` |
+| `POST` | `/chat` | Send question + context (`{ disease, message }`) → returns grounded RAG response |
 | `GET` | `/docs` | Interactive Swagger UI documentation |
 
 ---
@@ -145,4 +181,3 @@ Plant-Disease-Detection/
 ## 📜 License
 
 MIT
-
