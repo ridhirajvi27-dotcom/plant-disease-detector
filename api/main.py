@@ -3,7 +3,6 @@ import io
 import numpy as np
 from PIL import Image
 
-# Set Keras backend to torch to support running without full TensorFlow
 os.environ["KERAS_BACKEND"] = "torch"
 import keras
 
@@ -25,7 +24,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for frontend requests
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -34,14 +33,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Class names corresponding to model output indices
+
 CLASS_NAMES = [
     "Potato___Early_blight",
     "Potato___Late_blight",
     "Potato___healthy"
 ]
 
-# Model path resolution (flexible for local and Docker container environments)
+
 POSSIBLE_PATHS = [
     os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "models", "1.keras")),
     os.path.normpath(os.path.join(os.path.dirname(__file__), "models", "1.keras")),
@@ -68,14 +67,34 @@ def load_model():
         except Exception as e:
             print(f"[ERROR] Error loading model from {MODEL_PATH}: {e}")
     else:
-        print("[WARN] Model file not found in any expected location.")
+        print("[WARN] Model file not found locally. Downloading from Hugging Face...")
+        import requests
+        
+        # Ensure models directory exists
+        os.makedirs("models", exist_ok=True)
+        # Direct download link to the uploaded model in the HF Space
+        model_url = "https://huggingface.co/spaces/Rir25/plant-disease-api/resolve/main/models/1.keras"
+        
+        try:
+            print("Downloading model (this may take a minute)...")
+            response = requests.get(model_url, stream=True)
+            response.raise_for_status()
+            with open("models/1.keras", "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            
+            MODEL_PATH = "models/1.keras"
+            MODEL = keras.models.load_model(MODEL_PATH)
+            print("[OK] Model successfully downloaded and loaded.")
+        except Exception as e:
+            print(f"[ERROR] Failed to download or load model: {e}")
 
 def read_file_as_image(data: bytes) -> np.ndarray:
     """Reads image bytes, converts to RGB, resizes to (256, 256), and normalizes pixels to [0.0, 1.0]."""
     try:
         image = Image.open(io.BytesIO(data)).convert("RGB")
         image = image.resize((256, 256))
-        # Convert to float32 and normalize [0, 255] -> [0.0, 1.0] as expected by trained CNN
+        
         image_np = np.array(image, dtype=np.float32) / 255.0
         return image_np
     except Exception as e:
@@ -93,20 +112,20 @@ async def predict(file: UploadFile = File(...)):
     if MODEL is None:
         raise HTTPException(status_code=500, detail="Model is not loaded on the server.")
 
-    # Validate image file type
+   
     if file.content_type and not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
 
     bytes_data = await file.read()
     image_np = read_file_as_image(bytes_data)
 
-    # Expand dimension to match batch format: (1, 256, 256, 3)
+   
     img_batch = np.expand_dims(image_np, axis=0)
 
-    # Execute model prediction
+
     predictions = MODEL.predict(img_batch)
     
-    # Extract prediction array
+ 
     pred_scores = predictions[0]
     predicted_class = CLASS_NAMES[np.argmax(pred_scores)]
     confidence = float(np.max(pred_scores))
