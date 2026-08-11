@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+.venv311/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model files (too large for GitHub - hosted on Hugging Face)
+models/
+
+# Data files
+PlantVillage/
+data/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+training/.ipynb_checkpoints/
