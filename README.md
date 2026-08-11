@@ -10,8 +10,9 @@ Upload a potato leaf photo to diagnose **Early Blight**, **Late Blight**, or **H
 https://github.com/user-attachments/assets/a1d13fcb-ae88-4565-b312-80d62929f351
 
 
+---
 
-## ✨ Key Features
+## Key Features
 
 ###  1. AI Leaf Disease Detection (Computer Vision)
 - **Instant Diagnosis**: Classifies potato leaf images into **Early Blight**, **Late Blight**, or **Healthy**.
@@ -29,7 +30,7 @@ https://github.com/user-attachments/assets/a1d13fcb-ae88-4565-b312-80d62929f351
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Plant-Disease-Detection/
@@ -59,7 +60,7 @@ Plant-Disease-Detection/
 
 ---
 
-## 🚀 Local Setup & Run
+## Local Setup & Run
 
 ### Prerequisites
 
@@ -152,7 +153,7 @@ Plant-Disease-Detection/
 
 ---
 
-## 🛠️ API Endpoints
+##  API Endpoints
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
@@ -163,7 +164,7 @@ Plant-Disease-Detection/
 
 ---
 
-## 🧠 Model Details
+## Model Details
 
 - **Architecture**: Convolutional Neural Network (CNN)
 - **Framework**: Keras 3 (Torch / TensorFlow backend)
