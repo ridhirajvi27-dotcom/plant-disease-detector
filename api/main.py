@@ -70,9 +70,9 @@ def load_model():
         print("[WARN] Model file not found locally. Downloading from Hugging Face...")
         import requests
         
-        # Ensure models directory exists
+       
         os.makedirs("models", exist_ok=True)
-        # Direct download link to the uploaded model in the HF Space
+    
         model_url = "https://huggingface.co/spaces/Rir25/plant-disease-api/resolve/main/models/1.keras"
         
         try:
