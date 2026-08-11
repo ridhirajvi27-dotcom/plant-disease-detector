@@ -13,26 +13,19 @@ https://github.com/user-attachments/assets/a1d13fcb-ae88-4565-b312-80d62929f351
 
 ## ✨ Key Features
 
-### 📸 1. AI Leaf Disease Detection (Computer Vision)
+###  1. AI Leaf Disease Detection (Computer Vision)
 - **Instant Diagnosis**: Classifies potato leaf images into **Early Blight**, **Late Blight**, or **Healthy**.
 - **High-Accuracy CNN**: Powered by a custom **Keras 3 CNN model** trained on the PlantVillage dataset.
-- **Confidence & Severity Rating**: Visual progress bars and severity badges (🔴 *High Severity / Urgent Action*, 🟡 *Moderate*, 🟢 *Healthy*).
 
-### 🤖 2. Hybrid RAG AI Agronomist Chatbot
+
+### 2. Hybrid RAG AI Agronomist Chatbot
 - **Grounded Agronomic Data**: Utilizes a Retrieval-Augmented Generation (RAG) engine grounded in verified agricultural manuals (`api/knowledge_base/potato_diseases.json`).
 - **Context-Aware Recommendations**: Automatically injects the active leaf diagnosis into the prompt context to prevent AI hallucinations.
 - **Dual-Tier Hybrid Architecture**:
-  - **Tier 1 (LLM Generation)**: Connects to **Groq (Llama 3.1 8B)** or **OpenAI (GPT-4o-mini)** when API keys are configured.
+  - **Tier 1 (LLM Generation)**: Connects to **Groq (Llama 3.1 8B)** when API keys are configured.
   - **Tier 2 (Zero-Cost Offline Fallback)**: Built-in intelligent rule & knowledge retrieval engine for immediate, reliable answers without external API dependency.
-- **1-Click Quick Action Pills**: Preset buttons for 🌿 *Organic Treatment*, 🧪 *Chemical Dosages*, 🛡️ *Prevention Guidelines*, and 🔍 *Symptom Spotting*.
 - **Suggested Follow-up Questions**: Dynamically generated prompts tailored to the plant's health status.
 
-### 🎨 3. Enterprise-Grade User Experience (React + Vite)
-- **Dark Emerald Glassmorphism**: Premium visual UI with animated glow effects and micro-interactions.
-- **Dual Layout Modes**: Toggle seamlessly between an **Expandable Floating Drawer** and a **Dedicated Full-Height Side Panel**.
-- **Rich Markdown Formatting**: Supports formatted text, bullet lists, blockquotes, and safety callout banners.
-- **Copy & Share Capabilities**: 1-click button to copy treatment instructions to clipboard.
-- **Drag & Drop Uploader**: Smooth image upload with real-time preview and instant server communication.
 
 ---
 
