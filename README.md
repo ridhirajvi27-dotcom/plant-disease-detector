@@ -6,6 +6,11 @@ Upload a potato leaf photo to diagnose **Early Blight**, **Late Blight**, or **H
 
 ---
 
+
+https://github.com/user-attachments/assets/a1d13fcb-ae88-4565-b312-80d62929f351
+
+
+
 ## ✨ Key Features
 
 ### 📸 1. AI Leaf Disease Detection (Computer Vision)
