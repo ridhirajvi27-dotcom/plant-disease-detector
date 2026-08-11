@@ -34,3 +34,10 @@ data/
 # Jupyter checkpoints
 .ipynb_checkpoints/
 training/.ipynb_checkpoints/
+
+# Exclude extra READMEs and planning/explanation documents (keep only main README.md)
+api/README.md
+plan.md
+plan2.md
+explanation.md
+
