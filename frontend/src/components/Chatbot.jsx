@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   MessageSquare, X, Send, Bot, User, Sparkles, RefreshCw, 
-  Leaf, ShieldAlert, ShieldCheck, Copy, Check, Maximize2, Minimize2, ChevronRight, HelpCircle
+  Leaf, ShieldAlert, ShieldCheck, Copy, Check, Maximize2, Minimize2, ChevronRight, CornerDownLeft
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -19,15 +19,14 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
   const confidence = predictionResult?.confidence ? (predictionResult.confidence * 100).toFixed(1) : null;
   const displayDiseaseName = activeDisease.replace('___', ' — ').replace('_', ' ');
 
-  // Determine severity badge metadata
   const getSeverityInfo = () => {
     if (activeDisease === 'Potato___Late_blight') {
-      return { label: 'High Risk (Urgent Action Needed)', color: 'bg-rose-500/20 text-rose-300 border-rose-500/40', icon: ShieldAlert };
+      return { label: 'High Risk', color: 'bg-rose-500/15 text-rose-300 border-rose-500/30', icon: ShieldAlert };
     }
     if (activeDisease === 'Potato___Early_blight') {
-      return { label: 'Moderate Risk', color: 'bg-amber-500/20 text-amber-300 border-amber-500/40', icon: ShieldAlert };
+      return { label: 'Moderate Risk', color: 'bg-amber-500/15 text-amber-300 border-amber-500/30', icon: ShieldAlert };
     }
-    return { label: 'Optimal Health', color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40', icon: ShieldCheck };
+    return { label: 'Healthy Crop', color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', icon: ShieldCheck };
   };
 
   const severity = getSeverityInfo();
@@ -45,10 +44,10 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
     setMessages([
       {
         sender: 'bot',
-        text: `### 🌿 Welcome to AI Agronomist Assistant\n\n` +
+        text: `### 🌿 Welcome to AI Agronomist\n\n` +
               (predictionResult 
-                ? `Current leaf diagnosis: **${displayDiseaseName}** ${confidence ? `\`(${confidence}% confidence)\`` : ''}.\n\nHow can I help you manage your crop today? Select a quick action below or ask any custom question.`
-                : `Upload a plant leaf photo above for an instant CNN diagnosis, or ask me any general potato cultivation & pathology questions below!`),
+                ? `Diagnosis Context: **${displayDiseaseName}** ${confidence ? `\`(${confidence}% confidence)\`` : ''}.\n\nHow can I help you manage your crop? Click a recommended topic below or type your question.`
+                : `Upload a potato leaf photo above for instant AI diagnosis, or ask me any crop care & pathology questions below.`),
         sources: ['PlantCare RAG Knowledge Base']
       }
     ]);
@@ -93,7 +92,7 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
         ...prev,
         {
           sender: 'bot',
-          text: `⚠️ **Connection Error**: Unable to reach AI Agronomist API at \`${apiBaseUrl}\`. Please ensure the FastAPI backend is running.`
+          text: `⚠️ **Connection Error**: Unable to reach AI Agronomist API at \`${apiBaseUrl}\`. Please make sure uvicorn is running.`
         }
       ]);
     } finally {
@@ -120,48 +119,44 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium px-5 py-3.5 rounded-2xl shadow-2xl shadow-emerald-950/50 border border-emerald-400/30 transition-all duration-300 hover:scale-105 active:scale-95"
+          className="chatbot-launcher-btn"
           aria-label="Open AI Agronomist Chat"
         >
-          <div className="relative">
-            <Bot className="w-6 h-6 text-emerald-100 group-hover:rotate-12 transition-transform duration-300" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping" />
+          <div className="relative flex items-center justify-center">
+            <Bot className="w-6 h-6 text-emerald-300 group-hover:scale-110 transition-transform duration-300" />
+            <span className="pulse-beacon" />
           </div>
           <div className="text-left">
-            <div className="text-xs uppercase tracking-wider text-emerald-200 font-semibold flex items-center gap-1">
+            <div className="text-[11px] uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1">
               AI Agronomist <Sparkles className="w-3 h-3 text-emerald-300" />
             </div>
-            <div className="text-xs font-normal text-emerald-100/90 truncate max-w-[140px]">
+            <div className="text-xs font-medium text-slate-200 truncate max-w-[140px]">
               {displayDiseaseName}
             </div>
           </div>
         </button>
       )}
 
-      {/* Main Chatbot Interface Window */}
+      {/* Main Chatbot Window */}
       {isOpen && (
         <div
-          className={`bg-slate-950/95 backdrop-blur-xl border border-slate-700/80 rounded-3xl shadow-2xl shadow-black/80 flex flex-col overflow-hidden transition-all duration-300 ${
-            isExpanded
-              ? 'w-[90vw] md:w-[680px] h-[82vh] max-h-[780px]'
-              : 'w-[360px] sm:w-[440px] h-[580px]'
+          className={`chatbot-window-container ${
+            isExpanded ? 'window-expanded' : 'window-normal'
           }`}
         >
           {/* Header Bar */}
-          <div className="bg-gradient-to-r from-slate-900 via-emerald-950/90 to-slate-900 border-b border-slate-800 p-4 flex items-center justify-between">
+          <div className="chatbot-header">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-inner">
-                <Bot className="w-5 h-5" />
+              <div className="chatbot-avatar-icon">
+                <Bot className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-white text-sm tracking-wide">AI Agronomist</h3>
-                  <span className="text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded-md">
-                    RAG Powered
-                  </span>
+                  <h3 className="font-bold text-white text-sm tracking-wide">AI Agronomist</h3>
+                  <span className="rag-badge">RAG</span>
                 </div>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium border flex items-center gap-1 ${severity.color}`}>
+                  <span className={`severity-tag ${severity.color}`}>
                     <SeverityIcon className="w-3 h-3" />
                     {displayDiseaseName}
                   </span>
@@ -169,18 +164,18 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
               </div>
             </div>
 
-            {/* Header Window Controls */}
+            {/* Controls */}
             <div className="flex items-center gap-1 text-slate-400">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="p-1.5 rounded-lg hover:bg-slate-800 hover:text-white transition"
+                className="header-ctrl-btn"
                 title={isExpanded ? 'Collapse' : 'Expand window'}
               >
                 {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg hover:bg-rose-500/20 hover:text-rose-400 transition"
+                className="header-ctrl-btn hover:text-rose-400"
                 title="Close chat"
               >
                 <X className="w-4 h-4" />
@@ -189,44 +184,40 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+          <div className="chatbot-messages-body">
             {messages.map((msg, index) => (
               <div
                 key={index}
                 className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.sender === 'bot' && (
-                  <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-700/50 flex items-center justify-center text-emerald-400 flex-shrink-0 mt-1 shadow-md">
+                  <div className="bot-msg-avatar">
                     <Bot className="w-4 h-4" />
                   </div>
                 )}
 
                 <div
-                  className={`group relative max-w-[85%] rounded-2xl px-4 py-3 text-xs sm:text-sm leading-relaxed transition-all ${
-                    msg.sender === 'user'
-                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-br-none shadow-md shadow-emerald-950/40'
-                      : 'bg-slate-900/90 text-slate-100 border border-slate-800 rounded-bl-none shadow-md'
+                  className={`msg-bubble ${
+                    msg.sender === 'user' ? 'msg-bubble-user' : 'msg-bubble-bot'
                   }`}
                 >
-                  {/* Rich Markdown Display */}
-                  <div className="prose prose-invert prose-xs sm:prose-sm max-w-none prose-p:leading-relaxed prose-headings:text-emerald-300 prose-strong:text-emerald-200 prose-ul:my-1 prose-li:my-0.5">
+                  <div className="prose prose-invert prose-xs sm:prose-sm max-w-none">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {msg.text}
                     </ReactMarkdown>
                   </div>
 
-                  {/* Sources tag */}
                   {msg.sources && msg.sources.length > 0 && (
-                    <div className="mt-3 pt-2 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+                    <div className="msg-source-footer">
                       <div className="flex items-center gap-1">
                         <Leaf className="w-3 h-3 text-emerald-400" />
-                        <span className="text-slate-400">Sources:</span>
+                        <span>Source:</span>
                         <span className="text-emerald-300 italic">{msg.sources.join(', ')}</span>
                       </div>
                       <button
                         onClick={() => handleCopy(msg.text, index)}
-                        className="text-slate-500 hover:text-slate-300 transition"
-                        title="Copy text"
+                        className="copy-btn"
+                        title="Copy message"
                       >
                         {copiedIndex === index ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                       </button>
@@ -235,32 +226,31 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
                 </div>
 
                 {msg.sender === 'user' && (
-                  <div className="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 flex-shrink-0 mt-1 shadow-md">
+                  <div className="user-msg-avatar">
                     <User className="w-4 h-4" />
                   </div>
                 )}
               </div>
             ))}
 
-            {/* Typing Indicator */}
             {isLoading && (
               <div className="flex gap-3 justify-start items-center">
-                <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-700/50 flex items-center justify-center text-emerald-400 flex-shrink-0">
-                  <Bot className="w-4 h-4 animate-pulse" />
+                <div className="bot-msg-avatar">
+                  <Bot className="w-4 h-4 animate-pulse text-emerald-400" />
                 </div>
-                <div className="bg-slate-900/90 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-slate-400 flex items-center gap-2 shadow-md">
+                <div className="loading-bubble">
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-400" />
-                  <span>Retrieving agronomic insights...</span>
+                  <span>Consulting agricultural knowledge base...</span>
                 </div>
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Action Pills Grid */}
-          <div className="p-2.5 bg-slate-900/80 border-t border-slate-800/80">
-            <div className="text-[10px] uppercase font-semibold text-slate-400 mb-1.5 px-1 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-emerald-400" /> Recommended Actions
+          {/* Quick Action Grid */}
+          <div className="quick-actions-bar">
+            <div className="quick-actions-title">
+              <Sparkles className="w-3 h-3 text-emerald-400" /> Quick Topics
             </div>
             <div className="grid grid-cols-2 gap-1.5">
               {quickActionCards.map((card, i) => (
@@ -268,17 +258,17 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
                   key={i}
                   onClick={() => handleSend(card.prompt)}
                   disabled={isLoading}
-                  className="text-left text-xs bg-slate-800/80 hover:bg-emerald-950/60 hover:text-emerald-200 border border-slate-700/60 hover:border-emerald-600/50 text-slate-300 px-2.5 py-1.5 rounded-xl transition-all duration-200 flex items-center justify-between disabled:opacity-50 group"
+                  className="quick-action-pill"
                 >
                   <span className="truncate">{card.label}</span>
-                  <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-3 h-3 pill-arrow" />
                 </button>
               ))}
             </div>
           </div>
 
           {/* Input Footer */}
-          <div className="p-3 bg-slate-950 border-t border-slate-800 flex items-center gap-2">
+          <div className="chatbot-input-footer">
             <input
               type="text"
               value={inputMessage}
@@ -286,17 +276,18 @@ export default function Chatbot({ apiBaseUrl, predictionResult }) {
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Ask Agronomist a question..."
               disabled={isLoading}
-              className="flex-1 bg-slate-900 text-white placeholder-slate-500 text-xs sm:text-sm px-4 py-2.5 rounded-xl border border-slate-800 focus:outline-none focus:border-emerald-500/80 transition disabled:opacity-50 shadow-inner"
+              className="chatbot-text-input"
             />
             <button
               onClick={() => handleSend()}
               disabled={!inputMessage.trim() || isLoading}
-              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-slate-800 disabled:to-slate-800 text-white p-2.5 rounded-xl transition shadow-lg shadow-emerald-950/40 flex-shrink-0"
+              className="chatbot-send-btn"
               aria-label="Send message"
             >
               <Send className="w-4 h-4" />
             </button>
           </div>
+
         </div>
       )}
     </div>
