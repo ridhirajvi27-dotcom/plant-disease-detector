@@ -5,7 +5,7 @@ import PredictionResult from './components/PredictionResult';
 import Chatbot from './components/Chatbot';
 import { Sprout, Leaf, Shield, Zap } from 'lucide-react';
 
-const API_BASE_URL = 'https://localhost:8000';
+const API_BASE_URL = 'http://localhost:8000';
 
 export default function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -81,13 +81,13 @@ export default function App() {
 
   return (
     <div className="app-root">
-      {/* Background Image Layer */}
+     
       <div className="bg-image-layer">
         <img src="/images/download (15).jpg" alt="" className="bg-image" />
         <div className="bg-overlay" />
       </div>
 
-      {/* Floating decorative leaf accent */}
+     
       <div className="floating-accent-left">
         <img src="/images/download (14).jpg" alt="" className="accent-image" />
       </div>

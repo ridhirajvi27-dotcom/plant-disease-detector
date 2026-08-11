@@ -75,8 +75,8 @@ h1, h2, h3, h4 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.12;
-  filter: blur(2px) saturate(1.4);
+  opacity: 0.95;
+  filter: none;
 }
 
 .bg-overlay {
@@ -106,8 +106,8 @@ h1, h2, h3, h4 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.06;
-  filter: blur(8px);
+  opacity: 0.15;
+  filter: none;
   mask-image: linear-gradient(to right, rgba(0,0,0,0.5) 0%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0.5) 0%, transparent 100%);
 }
