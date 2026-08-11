@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import ImageUploader from './components/ImageUploader';
 import PredictionResult from './components/PredictionResult';
+import Chatbot from './components/Chatbot';
 import { Sprout } from 'lucide-react';
 
 const API_BASE_URL = 'http://localhost:8000';
@@ -112,6 +113,12 @@ export default function App() {
           />
         </div>
       </main>
+
+      <Chatbot
+        apiBaseUrl={API_BASE_URL}
+        predictionResult={predictionResult}
+      />
     </div>
   );
 }
+

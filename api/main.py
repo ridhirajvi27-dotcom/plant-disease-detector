@@ -8,8 +8,15 @@ os.environ["KERAS_BACKEND"] = "torch"
 import keras
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional, List
 import uvicorn
+
+from rag_engine import generate_agronomist_response
+
+class ChatRequest(BaseModel):
+    disease: Optional[str] = "Potato___healthy"
+    message: str
 
 app = FastAPI(
     title="Plant Disease Detection API",
@@ -107,6 +114,14 @@ async def predict(file: UploadFile = File(...)):
         "class": predicted_class,
         "confidence": round(confidence, 4)
     }
+
+@app.post("/chat")
+async def chat_agronomist(req: ChatRequest):
+    if not req.message or not req.message.strip():
+        raise HTTPException(status_code=400, detail="Chat message cannot be empty.")
+    
+    response_data = generate_agronomist_response(req.disease, req.message)
+    return response_data
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
