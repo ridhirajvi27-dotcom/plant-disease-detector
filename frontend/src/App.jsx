@@ -3,9 +3,9 @@ import Header from './components/Header';
 import ImageUploader from './components/ImageUploader';
 import PredictionResult from './components/PredictionResult';
 import Chatbot from './components/Chatbot';
-import { Sprout } from 'lucide-react';
+import { Sprout, Leaf, Shield, Zap } from 'lucide-react';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://localhost:8000';
 
 export default function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -15,7 +15,6 @@ export default function App() {
   const [predictionResult, setPredictionResult] = useState(null);
   const [error, setError] = useState(null);
 
-  // Check connection to FastAPI backend on load
   useEffect(() => {
     const checkBackend = async () => {
       try {
@@ -81,7 +80,18 @@ export default function App() {
   };
 
   return (
-    <div>
+    <div className="app-root">
+      {/* Background Image Layer */}
+      <div className="bg-image-layer">
+        <img src="/images/download (15).jpg" alt="" className="bg-image" />
+        <div className="bg-overlay" />
+      </div>
+
+      {/* Floating decorative leaf accent */}
+      <div className="floating-accent-left">
+        <img src="/images/download (14).jpg" alt="" className="accent-image" />
+      </div>
+
       <Header isConnected={isConnected} />
 
       <main className="main-wrapper">
@@ -96,21 +106,57 @@ export default function App() {
           </p>
         </section>
 
-        <div className="content-grid">
-          <ImageUploader
-            selectedFile={selectedFile}
-            previewUrl={previewUrl}
-            onFileSelect={handleFileSelect}
-            onRemoveFile={handleRemoveFile}
-            onAnalyze={handleAnalyze}
-            isLoading={isLoading}
-            isConnected={isConnected}
-          />
+        {/* Centered Card Layout */}
+        <div className="center-card-container">
+          <div className="center-glass-card">
+            <div className="card-inner-grid">
+              <div className="card-left-section">
+                <ImageUploader
+                  selectedFile={selectedFile}
+                  previewUrl={previewUrl}
+                  onFileSelect={handleFileSelect}
+                  onRemoveFile={handleRemoveFile}
+                  onAnalyze={handleAnalyze}
+                  isLoading={isLoading}
+                  isConnected={isConnected}
+                />
+              </div>
 
-          <PredictionResult
-            result={predictionResult}
-            error={error}
-          />
+              <div className="card-divider" />
+
+              <div className="card-right-section">
+                <PredictionResult
+                  result={predictionResult}
+                  error={error}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Feature Highlights */}
+        <div className="features-row">
+          <div className="feature-chip">
+            <div className="feature-chip-icon"><Zap size={18} /></div>
+            <div>
+              <div className="feature-chip-title">Instant Analysis</div>
+              <div className="feature-chip-desc">Results in under 2 seconds</div>
+            </div>
+          </div>
+          <div className="feature-chip">
+            <div className="feature-chip-icon"><Shield size={18} /></div>
+            <div>
+              <div className="feature-chip-title">RAG-Powered Advice</div>
+              <div className="feature-chip-desc">Grounded agricultural data</div>
+            </div>
+          </div>
+          <div className="feature-chip">
+            <div className="feature-chip-icon"><Leaf size={18} /></div>
+            <div>
+              <div className="feature-chip-title">Expert Agronomist</div>
+              <div className="feature-chip-desc">Organic & chemical treatments</div>
+            </div>
+          </div>
         </div>
       </main>
 
@@ -121,4 +167,3 @@ export default function App() {
     </div>
   );
 }
-
