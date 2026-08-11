@@ -6,12 +6,14 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files and models directory
-COPY main.py .
+# Copy application code, RAG engine, knowledge base, and models
+COPY main.py rag_engine.py ./
+COPY knowledge_base/ ./knowledge_base/
 COPY models/ ./models/
 
-# Hugging Face Spaces expects port 7860
+# Port exposure (7860 for Hugging Face Spaces, or set PORT env on Render/Railway)
 EXPOSE 7860
 
-# Start FastAPI application
+# Start FastAPI server
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
+
