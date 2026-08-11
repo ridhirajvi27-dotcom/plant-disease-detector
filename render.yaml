@@ -1,7 +1,4 @@
-services:
-  # ---------------------------------------------------------------------------
-  # 1. FastAPI Backend Web Service (Free Plan)
-  # ---------------------------------------------------------------------------
+
   - type: web
     name: plant-disease-api
     env: python
@@ -13,9 +10,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.0
 
-  # ---------------------------------------------------------------------------
-  # 2. React + Vite Frontend Static Site (Free Plan)
-  # ---------------------------------------------------------------------------
+
   - type: web
     name: plant-disease-frontend
     env: static
