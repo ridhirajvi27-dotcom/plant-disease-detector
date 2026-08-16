@@ -14,7 +14,7 @@ https://github.com/user-attachments/assets/a1d13fcb-ae88-4565-b312-80d62929f351
 
 ## Key Features
 
-###  1. AI Leaf Disease Detection (Computer Vision)
+###  1. AI Leaf Disease Detection 
 - **Instant Diagnosis**: Classifies potato leaf images into **Early Blight**, **Late Blight**, or **Healthy**.
 - **High-Accuracy CNN**: Powered by a custom **Keras 3 CNN model** trained on the PlantVillage dataset.
 
@@ -22,41 +22,7 @@ https://github.com/user-attachments/assets/a1d13fcb-ae88-4565-b312-80d62929f351
 ### 2. Hybrid RAG AI Agronomist Chatbot
 - **Grounded Agronomic Data**: Utilizes a Retrieval-Augmented Generation (RAG) engine grounded in verified agricultural manuals (`api/knowledge_base/potato_diseases.json`).
 - **Context-Aware Recommendations**: Automatically injects the active leaf diagnosis into the prompt context to prevent AI hallucinations.
-- **Dual-Tier Hybrid Architecture**:
-  - **Tier 1 (LLM Generation)**: Connects to **Groq (Llama 3.1 8B)** when API keys are configured.
-  - **Tier 2 (Zero-Cost Offline Fallback)**: Built-in intelligent rule & knowledge retrieval engine for immediate, reliable answers without external API dependency.
 - **Suggested Follow-up Questions**: Dynamically generated prompts tailored to the plant's health status.
-
-
----
-
-##  Project Structure
-
-```
-Plant-Disease-Detection/
-├── api/                            # FastAPI backend
-│   ├── main.py                     # Server endpoints (/predict, /chat, /ping)
-│   ├── rag_engine.py               # Hybrid RAG & Knowledge Retrieval engine
-│   ├── knowledge_base/
-│   │   └── potato_diseases.json    # Grounded agricultural knowledge base
-│   ├── requirements.txt            # Python dependencies
-│   └── Dockerfile                  # Containerization setup
-├── frontend/                       # React + Vite frontend
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── index.css               # Design system & glassmorphism styles
-│   │   └── components/
-│   │       ├── Header.jsx          # Header with active context indicator
-│   │       ├── ImageUploader.jsx   # Drag & drop leaf uploader
-│   │       ├── PredictionResult.jsx# Diagnosis status & severity card
-│   │       └── Chatbot.jsx         # RAG AI Agronomist chatbot UI
-│   ├── index.html
-│   └── package.json
-├── models/                         # Trained model directory
-│   └── 1.keras                     # Keras 3 CNN model file (~178 MB)
-├── training/                       # Jupyter notebooks for CNN model training
-└── README.md                       # Project documentation
-```
 
 ---
 
@@ -81,15 +47,6 @@ cd plant-disease-detector
 
 ### 2. Model File Setup
 
-Ensure the trained model file `1.keras` is placed inside the `models/` directory:
-
-```
-Plant-Disease-Detection/
-└── models/
-    └── 1.keras
-```
-
-> **Note:** If you don't have the pre-trained model file, you can train a new one using the Jupyter notebook provided in the `training/` folder:
 > ```bash
 > jupyter notebook training/plant_disease.ipynb
 > ```
@@ -107,13 +64,6 @@ Plant-Disease-Detection/
 2. Install the required Python dependencies:
    ```bash
    pip install -r requirements.txt
-   ```
-
-3. *(Optional)* Configure external LLM API key for Tier-1 RAG generation:
-   ```bash
-   export GROQ_API_KEY="your_groq_api_key_here"
-   # OR
-   export OPENAI_API_KEY="your_openai_api_key_here"
    ```
 
 4. Run the FastAPI development server:
